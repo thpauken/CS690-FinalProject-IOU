@@ -97,7 +97,7 @@ class Program
             Console.WriteLine("Welcome. Please choose a mode: ");
             Console.WriteLine("1. Expense Records");
             Console.WriteLine("2. Outstanding Debts");
-            Console.WriteLine("3. Reporting Activity")
+            Console.WriteLine("3. Reporting Activity");
             Console.WriteLine("4. Quit");
 
             string choice = Console.ReadLine();
