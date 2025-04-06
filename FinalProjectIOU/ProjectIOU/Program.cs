@@ -9,7 +9,7 @@ class Program
     static void Main()
     {
         // intro
-        Console.WriteLine("Welcome to IOU! Your expense sharing solution");
+        Console.WriteLine("\n"+ "Welcome to IOU! Your expense sharing solution");
         Console.WriteLine("Choose an option (1 or 2) ");
         Console.WriteLine("1. Log in");
         Console.WriteLine("2. Create Account");
@@ -119,12 +119,60 @@ class Program
 
     static void ExpenseRecords(User user)
     {
-        Console.WriteLine(" Do you want to:" + "\n" + "1. Create a new expense record" + "\n" + "2. Modify an existing expense record");
+        Console.WriteLine(" Do you want to:" + "\n" + "1. Create a new expense record" + "\n" + "2. Delete an expense record");
         string option = Console.ReadLine();
         if (option == "1")
         {
             // call the method to create a new expense record from expenserecord.cs
             ExpenseRecord.CreateExpenseRecord(user);
+        }
+        if (option == "2")
+        {
+            static void DeleteExpenseRecord()
+            {
+                if (!File.Exists("ExpenseRecords.txt"))
+                {
+                    Console.WriteLine("No expense records created.");
+                    return;
+                }
+                var lines = File.ReadAllLines("ExpenseRecords.txt");
+                // display the names of the existing expense records
+                Console.WriteLine("Expense Records:");
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    var parts = lines[i].Split(',');
+                    if (parts.Length >= 2)
+                    {
+                        Console.WriteLine(i + 1 + ". " + parts[1]);
+                    }
+                }
+
+                Console.WriteLine("Enter the number of the expense record you wish to delete:");
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out int recordNumber) && recordNumber > 0 && recordNumber <= lines.Length)
+                { 
+                    Console.WriteLine("Are you sure? Type 'yes' to delete");
+                    string confirmation = Console.ReadLine();
+                    if (confirmation == "yes")
+                    {
+                        // delete the specified expense record
+                        // isolate the record to delete in an array 
+                        var updatedLines = lines.Where((line, index) => index != recordNumber - 1).ToArray(); 
+                        File.WriteAllLines("ExpenseRecords.txt", updatedLines); // overwriting the file
+                        Console.WriteLine("Deleted expense record"); 
+                    
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not deleted.");
+                        return;
+                    }
+                }       
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid option selected. Exiting program.");
         }
     }
 

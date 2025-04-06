@@ -37,7 +37,7 @@ public class ExpenseRecord
         // put the debt records in a separate debts file to be queried in debts mode
         foreach (var debt in DebtsList)
         {
-            string debtString = ID + "," + debt.OwingPerson.Name + "," + debt.OwedAmount;
+            string debtString = ID + "," + debt.OwingPerson.Name + "," + debt.OwedAmount + "," + debt.PaidStatus;
             File.AppendAllText("Debts.txt", debtString + "\n");
         }
     }
