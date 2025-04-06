@@ -92,49 +92,56 @@ class Program
     }
     static void Proceed(User user)
     {
-        Console.WriteLine("Welcome. Please choose a mode: ");
-        Console.WriteLine("1. Expense Records");
-        Console.WriteLine("2. Outstanding Debts");
-        Console.WriteLine("3. Reporting Activity");
-
-        string choice = Console.ReadLine();
-
-        switch (choice)
+        while (true) // need to return the user to the main menu if they enter an invalid input
         {
-            case "1":
-                ExpenseRecords(user);
-                break;
-            case "2":
-                Console.WriteLine("Outstanding Debts is not yet implemented.");
-                break;
-        
-            // add this logic
-            case "3":
-                Console.WriteLine("Reporting Activity is not implemented yet.");
-                break;
-        
-            // add this logic
+            Console.WriteLine("Welcome. Please choose a mode: ");
+            Console.WriteLine("1. Expense Records");
+            Console.WriteLine("2. Outstanding Debts");
+            Console.WriteLine("3. Reporting Activity");
+            Console.WriteLine("4. Quit");
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    ExpenseRecords(user);
+                    break;
+                case "2":
+                    Debt.OutstandingDebts(user);
+                    break;
+            
+                // add this logic
+                case "3":
+                    Console.WriteLine("Reporting Activity is not implemented yet.");
+                    break;
+                case "4":
+                    Console.WriteLine("See ya later!");
+                    return; 
+            
+                // add this logic
+            }
         }
+
+        static void ExpenseRecords(User user)
+        {
+            Console.WriteLine(" Do you want to:" + "\n" + "1. Create a new expense record" + "\n" + "2. Delete an expense record");
+            string option = Console.ReadLine();
+            if (option == "1")
+            {
+                // call the method to create a new expense record from expenserecord.cs
+                ExpenseRecord.CreateExpenseRecord(user);
+            }
+            else if (option == "2")
+            {
+                ExpenseRecord.DeleteExpenseRecord(); 
+            }
+            else
+            {
+                Console.WriteLine("Invalid option selected. Exiting program.");
+            }
+        }
+
+
     }
-
-    static void ExpenseRecords(User user)
-    {
-        Console.WriteLine(" Do you want to:" + "\n" + "1. Create a new expense record" + "\n" + "2. Delete an expense record");
-        string option = Console.ReadLine();
-        if (option == "1")
-        {
-            // call the method to create a new expense record from expenserecord.cs
-            ExpenseRecord.CreateExpenseRecord(user);
-        }
-        else if (option == "2")
-        {
-            ExpenseRecord.DeleteExpenseRecord(); 
-        }
-        else
-        {
-            Console.WriteLine("Invalid option selected. Exiting program.");
-        }
-    }
-
-
 }
