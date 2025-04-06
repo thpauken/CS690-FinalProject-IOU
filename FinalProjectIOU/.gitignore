@@ -31,7 +31,7 @@ artifacts/
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 logins.txt
-ExpenseRecords.txt
+ExpenseRecord.txt
 Debts.txt
 
 # NuGet Packages
