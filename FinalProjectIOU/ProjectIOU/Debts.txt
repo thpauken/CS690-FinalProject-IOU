@@ -1,2 +1,0 @@
-83300e88-a958-4848-bff2-8ba62fd4248a,Samantha,thpauken,100,Paid
-83300e88-a958-4848-bff2-8ba62fd4248a,Hotel,thpauken,1600,Unpaid
