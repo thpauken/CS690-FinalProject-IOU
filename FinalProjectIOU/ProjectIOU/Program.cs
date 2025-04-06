@@ -50,7 +50,9 @@ class Program
             if (parts.Length == 2 && parts[0] == username && parts[1] == password)
             {
                 // continue onto the main menu for mode selection?
-                Proceed(username);
+                Proceed(new User {
+                    Username = username, Password = password
+                });
                 return;  
             }
         }
@@ -81,16 +83,50 @@ class Program
         }
         // append new username to logins file
         File.AppendAllText(loginsFile, username + ":" + password + "\n");
-        Proceed(username);
+        User user = new User {
+            Username = username, 
+            Password = password
+        }; 
+        
+        Proceed(user); 
     }
-    static void Proceed(string username)
+    static void Proceed(User user)
     {
         Console.WriteLine("Welcome. Please choose a mode: ");
         Console.WriteLine("1. Expense Records");
         Console.WriteLine("2. Outstanding Debts");
         Console.WriteLine("3. Reporting Activity");
+
+        string choice = Console.ReadLine();
+
+        switch (choice)
+        {
+            case "1":
+                ExpenseRecords(user);
+                break;
+            case "2":
+                Console.WriteLine("Outstanding Debts is not yet implemented.");
+                break;
+        
+            // add this logic
+            case "3":
+                Console.WriteLine("Reporting Activity is not implemented yet.");
+                break;
+        
+            // add this logic
+        }
     }
 
+    static void ExpenseRecords(User user)
+    {
+        Console.WriteLine(" Do you want to:" + "\n" + "1. Create a new expense record" + "\n" + "2. Modify an existing expense record");
+        string option = Console.ReadLine();
+        if (option == "1")
+        {
+            // call the method to create a new expense record from expenserecord.cs
+            ExpenseRecord.CreateExpenseRecord(user);
+        }
+    }
 
 
 }

@@ -10,10 +10,11 @@ public class Debt
    public decimal OwedAmount { get; set; }
    public PaidStatus PaidStatus { get; set; }
    public DateTime PaidDate { get; set; }
+   public ExpenseRecord LinkedExpenseRecord { get; set; } // stores reference to expense record
 
 // defining the constructor
 // defining how default values are set like PaidStatus set to Unpaid, and PaidDate default value until it is later updated when PaidStatus is Paid
-   public Debt(Person owingPerson, Person owedToPerson, decimal owedAmount)
+   public Debt(Person owingPerson, Person owedToPerson, decimal owedAmount, ExpenseRecord linkedExpenseRecord)
    {
     ID = Guid.NewGuid();
     OwingPerson = owingPerson;
@@ -21,5 +22,6 @@ public class Debt
     OwedAmount = owedAmount;
     PaidStatus = PaidStatus.Unpaid;
     PaidDate = DateTime.MinValue;
+    LinkedExpenseRecord = linkedExpenseRecord; 
    }
 }
