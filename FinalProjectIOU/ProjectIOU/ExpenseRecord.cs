@@ -110,11 +110,21 @@ public class ExpenseRecord
             string confirmation = Console.ReadLine();
             if (confirmation == "yes")
             {
+                // store expense record info to be deleted, before deleting  
+                var expenseRecordToBeDeleted = lines[recordNumber - 1];
+                var expenseRecordParts = expenseRecordToBeDeleted.Split(',');
+                var expenseIdToDelete = expenseRecordParts[0];
+
                 // delete the specified expense record
                 // isolate the record to delete in an array 
                 var updatedLines = lines.Where((line, index) => index != recordNumber - 1).ToArray(); 
-                File.WriteAllLines("ExpenseRecords.txt", updatedLines); // overwriting the file
-                Console.WriteLine("Deleted expense record");             
+                File.WriteAllLines("ExpenseRecords.txt", updatedLines);
+                Console.WriteLine("Deleted expense record and associated debts");             
+            
+                // now delete associated debt records; put them in an array, match to expense record ID, delete
+                var debtLines = File.ReadAllLines("Debts.txt").Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+                var updatedDebtLines = debtLines.Where(line => !line.StartsWith(expenseIdToDelete)).ToArray();
+                File.WriteAllLines("Debts.txt", updatedDebtLines);
             }
             else
             {
