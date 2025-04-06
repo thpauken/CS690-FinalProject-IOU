@@ -13,7 +13,7 @@ public class Debt
 
 // defining the constructor
 // defining how default values are set like PaidStatus set to Unpaid, and PaidDate default value until it is later updated when PaidStatus is Paid
-   public Debt(Person owingPerson, Person owedToPerswon, decimal owedAmount)
+   public Debt(Person owingPerson, Person owedToPerson, decimal owedAmount)
    {
     ID = Guid.NewGuid();
     OwingPerson = owingPerson;

@@ -4,7 +4,7 @@ using System.IO;
 
 public class Person
 {
-    public string Name {get; set;} = string.Empty;
+    public string Name {get; set;}
     
     public Person (string name)
     {
