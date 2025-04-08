@@ -48,9 +48,9 @@ public class Debt
             Console.WriteLine((i + 1) + ". Person: " + debt[1] + " | Amount: " + debt[3]);
          }
 
-         Console.WriteLine("Enter the number of the debt you would like to mark as paid, or type 'return' to go back to mode menu");
+         Console.WriteLine("Enter the number of the debt you would like to mark as paid, or type 'back' to go back to mode menu");
          string input = Console.ReadLine();
-         if (input == "return")
+         if (input == "back")
          {
             return; 
          }

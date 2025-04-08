@@ -8,11 +8,11 @@ class Program
 
     static void Main()
     {
-        // intro
         Console.WriteLine("\n"+ "Welcome to IOU! Your expense sharing solution");
-        Console.WriteLine("Choose an option (1 or 2) ");
+        Console.WriteLine("Choose an option");
         Console.WriteLine("1. Log in");
         Console.WriteLine("2. Create Account");
+        Console.WriteLine("3. Quit");
         string option = Console.ReadLine();
 
         if (option == "1")
@@ -22,6 +22,11 @@ class Program
         else if (option == "2")
         {
             CreateAccount();
+        }
+
+        else if (option == "3")
+        {
+            Console.WriteLine("See ya later!");
         }
         else
         {
@@ -98,7 +103,7 @@ class Program
             Console.WriteLine("1. Expense Records");
             Console.WriteLine("2. Outstanding Debts");
             Console.WriteLine("3. Reporting Activity");
-            Console.WriteLine("4. Quit");
+            Console.WriteLine("4. Go Back (Log Out)");
 
             string choice = Console.ReadLine();
 
@@ -116,16 +121,14 @@ class Program
                     Console.WriteLine("Reporting Activity is not implemented yet.");
                     break;
                 case "4":
-                    Console.WriteLine("See ya later!");
+                    Console.WriteLine("Logging Out");
                     return; 
-            
-                // add this logic
             }
         }
 
         static void ExpenseRecords(User user)
         {
-            Console.WriteLine(" Do you want to:" + "\n" + "1. Create a new expense record" + "\n" + "2. Delete an expense record");
+            Console.WriteLine(" Do you want to:" + "\n" + "1. Create a new expense record" + "\n" + "2. Delete an expense record"+ "\n" + "3. Go Back");
             string option = Console.ReadLine();
             if (option == "1")
             {
@@ -136,10 +139,10 @@ class Program
             {
                 ExpenseRecord.DeleteExpenseRecord(); 
             }
-            else
+            else if (option == "3")
             {
-                Console.WriteLine("Invalid option selected. Exiting program.");
-            }
+                return; 
+            } 
         }
 
 

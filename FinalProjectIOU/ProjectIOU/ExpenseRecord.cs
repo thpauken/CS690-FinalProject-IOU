@@ -44,17 +44,20 @@ public class ExpenseRecord
     //mthod to create new expense records
     public static void CreateExpenseRecord(User user)
     {
-        Console.WriteLine("Choose a name for your expense record: ");
+        Console.WriteLine("Choose a name for your expense record: " + "\n" + "Type 'back' to go back");
         string expenseName = Console.ReadLine();
+        if (expenseName == "back")
+        {
+            return;
+        }
         ExpenseRecord newRecord = new ExpenseRecord(expenseName, user); // creating the new expense record and storing the creating user as the logged in user
 
         bool moreDebts = true; // variable to check when user is adding more debt records, will end when this is false 
 
         while (moreDebts)
         {
-            Console.WriteLine("Enter the name of the person that owes, or 'done' when finished: ");
+            Console.WriteLine("Enter the name of the person that owes, or 'done' when finished:");
             string personName = Console.ReadLine();
-            
             if (personName == "done")
             { 
                 moreDebts = false;
@@ -102,12 +105,20 @@ public class ExpenseRecord
             }
         }
 
-        Console.WriteLine("Enter the number of the expense record you wish to delete:");
+        Console.WriteLine("Enter the number of the expense record you wish to delete, or choose 'back' to return:");
         string input = Console.ReadLine();
+        if (input == "back")
+        {
+            return;
+        }
         if (int.TryParse(input, out int recordNumber) && recordNumber > 0 && recordNumber <= lines.Length)
         { 
-            Console.WriteLine("Are you sure? Type 'yes' to delete");
+            Console.WriteLine("Are you sure? Type 'yes' to delete or 'back' to return:");
             string confirmation = Console.ReadLine();
+            if (confirmation == "back")
+            {
+                return;
+            }
             if (confirmation == "yes")
             {
                 // store expense record info to be deleted, before deleting  
