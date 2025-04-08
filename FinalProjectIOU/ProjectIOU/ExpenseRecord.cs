@@ -50,6 +50,11 @@ public class ExpenseRecord
         {
             return;
         }
+        if (string.IsNullOrWhiteSpace(expenseName))
+        {
+            Console.WriteLine("Expense name cannot be empty.");
+            return;
+        }
         ExpenseRecord newRecord = new ExpenseRecord(expenseName, user); // creating the new expense record and storing the creating user as the logged in user
 
         bool moreDebts = true; // variable to check when user is adding more debt records, will end when this is false 
@@ -66,13 +71,20 @@ public class ExpenseRecord
             {
                 
                 Console.WriteLine("Enter the amount they owe: ");
+                if (decimal.TryParse(Console.ReadLine(), out decimal owedAmount) == false)
+                {
+                    Console.WriteLine("Invalid amount. Please enter a valid number.");
+                    continue;
+                }
+                else 
+                {
                 decimal owedAmount = Convert.ToDecimal(Console.ReadLine());
                 // create a debt record and add the person name, OwedToPerson as the logged-in-user, and defaulting debts to unpaid
                 Person owingPerson = new Person(personName);
                 Person owedToPerson = new Person (user.Username);
                 Debt newDebt = new Debt(owingPerson, owedToPerson, owedAmount, newRecord);
                 newRecord.AddDebt(newDebt);
-            }   
+            }   }
         // save the debt records to a debt file
         }
     newRecord.SaveToFile();
@@ -85,6 +97,7 @@ public class ExpenseRecord
         if (!File.Exists("ExpenseRecords.txt"))
         {
             Console.WriteLine("No expense records exist.");
+            Console.ReadKey();
             return;
         }
         // fixed issue with blank rows in expense file shifting the index of listed expense records 
@@ -92,56 +105,50 @@ public class ExpenseRecord
         if (lines.Length == 0)
         {   
             Console.WriteLine("No expense records exist.");
+            Console.ReadKey();
             return;
         }
         // display the names of the existing expense records
+        Console.Clear();
         Console.WriteLine("Expense Records:");
-        for (int i = 0; i < lines.Length; i++)
+        string[] expenseNames = lines.Select((line, index) =>
         {
-            var parts = lines[i].Split(',');
-            if (parts.Length >= 2)
-            {
-                Console.WriteLine(i + 1 + ". " + parts[1]);
-            }
-        }
-
-        Console.WriteLine("Enter the number of the expense record you wish to delete, or choose 'back' to return:");
-        string input = Console.ReadLine();
-        if (input == "back")
+            var parts = line.Split(',');
+            return (index + 1) + ". " + parts[1];
+        }).ToArray();
+        
+        string[] options = expenseNames.Concat(new[] { "Go Back" }).ToArray();
+        int choice = DisplayMenu(options);
+        if (choice == options.Length - 1)
         {
             return;
         }
-        if (int.TryParse(input, out int recordNumber) && recordNumber > 0 && recordNumber <= lines.Length)
-        { 
-            Console.WriteLine("Are you sure? Type 'yes' to delete or 'back' to return:");
-            string confirmation = Console.ReadLine();
-            if (confirmation == "back")
-            {
-                return;
-            }
-            if (confirmation == "yes")
-            {
-                // store expense record info to be deleted, before deleting  
-                var expenseRecordToBeDeleted = lines[recordNumber - 1];
-                var expenseRecordParts = expenseRecordToBeDeleted.Split(',');
-                var expenseIdToDelete = expenseRecordParts[0];
-
-                // delete the specified expense record
-                // isolate the record to delete in an array 
-                var updatedLines = lines.Where((line, index) => index != recordNumber - 1).ToArray(); 
-                File.WriteAllLines("ExpenseRecords.txt", updatedLines);
-                Console.WriteLine("Deleted expense record and associated debts");             
-            
-                // now delete associated debt records; put them in an array, match to expense record ID, delete
-                var debtLines = File.ReadAllLines("Debts.txt").Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
-                var updatedDebtLines = debtLines.Where(line => !line.StartsWith(expenseIdToDelete)).ToArray();
-                File.WriteAllLines("Debts.txt", updatedDebtLines);
-            }
-            else
-            {
-                Console.WriteLine("Not deleted.");
-                return;
-            }
+        
+        Console.WriteLine("Are you sure you want to delete?");
+        string[] confirming = {"Yes", "No"};
+        int confirmationChoice = DisplayMenu(confirming);
+        if (confirmationChoice == 1)
+        {
+            return;
         }
+        var expenseRecordToBeDeleted = lines[recordNumber - 1];
+        var expenseRecordParts = expenseRecordToBeDeleted.Split(',');
+        var expenseIdToDelete = expenseRecordParts[0];
+
+        // delete the specified expense record
+        // isolate the record to delete in an array 
+        var updatedLines = lines.Where((line, index) => index != recordNumber - 1).ToArray(); 
+        File.WriteAllLines("ExpenseRecords.txt", updatedLines);
+        Console.WriteLine("Deleted expense record and associated debts");             
+    
+        // now delete associated debt records; put them in an array, match to expense record ID, delete
+        var debtLines = File.ReadAllLines("Debts.txt").Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+        var updatedDebtLines = debtLines.Where(line => !line.StartsWith(expenseIdToDelete)).ToArray();
+        File.WriteAllLines("Debts.txt", updatedDebtLines);
+
+        Console.WriteLine("Deleted expense records and associated debts");
+        Console.ReadKey();
+        
     }
 }
+

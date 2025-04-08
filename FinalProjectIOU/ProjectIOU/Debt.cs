@@ -25,8 +25,9 @@ public class Debt
       {
          if (!File.Exists("Debts.txt"))
          {
-         Console.WriteLine("No debts are owed to you!");
-         return;
+            Console.WriteLine("No debts are owed to you!");
+            Console.ReadKey();
+            return;
          }
          var debtLines = File.ReadAllLines("Debts.txt"); // define this variable to read all lines 
          // read through all the debt lies in the Debts.txt file, return those that are unpaid and the owedToPerson is the logged in user
@@ -38,11 +39,14 @@ public class Debt
          if (unpaidDebts.Count == 0)
          {
             Console.WriteLine("No debts are owed to you!");
+            Console.ReadKey();
             return;
          }
          // display the unpaid debt records that are found
+         Console.Clear();
          Console.WriteLine("Outstanding Debts:" + "\n");
-         for (int i = 0; i < unpaidDebts.Count; i++)
+         string[] debtOptions = unpaidDebts.Select((debt, index) =>)
+            
          {
             var debt = unpaidDebts[i];
             Console.WriteLine((i + 1) + ". Person: " + debt[1] + " | Amount: " + debt[3]);

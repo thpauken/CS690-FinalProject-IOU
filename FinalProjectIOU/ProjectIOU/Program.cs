@@ -8,36 +8,32 @@ class Program
 
     static void Main()
     {
-        Console.WriteLine("\n"+ "Welcome to IOU! Your expense sharing solution");
-        Console.WriteLine("Choose an option");
-        Console.WriteLine("1. Log in");
-        Console.WriteLine("2. Create Account");
-        Console.WriteLine("3. Quit");
-        string option = Console.ReadLine();
+        while(true)
+        {
+            Console.Clear();
+            Console.WriteLine("\n"+ "Welcome to IOU! Your expense sharing solution");
+            string[] mainMenu = {"Log in", "Create Account", "Quit"};
+            int chosenOption = DisplayMenu(mainMenu);
+            if (chosenOption == 0)
+            {
+                Login();
+            }
+            else if (chosenOption == 1)
+            {
+                CreateAccount();
+            }
 
-        if (option == "1")
-        {
-            Login();
+            else (chosenOption == 2)
+            {
+                Console.WriteLine("See ya later!");
+            }
         }
-        else if (option == "2")
-        {
-            CreateAccount();
-        }
-
-        else if (option == "3")
-        {
-            Console.WriteLine("See ya later!");
-        }
-        else
-        {
-            Console.WriteLine("Invalid input.");
-        }
-
-        
+    
     }
     static void Login()
     {
-        Console.WriteLine("\nUsername: ");
+        Console.Clear()
+        Console.WriteLine("Username: ");
         string username = Console.ReadLine();
         Console.Write("Password: ");
         string password = Console.ReadLine();
@@ -62,11 +58,13 @@ class Program
             }
         }
         Console.WriteLine("Login failed, incorrect username and password.");
+        Console.ReadKey();
     }
+
 
     static void CreateAccount()
     {
-        Console.Write("\nChoose a username: ");
+        Console.Write("Choose a username: ");
         string username = Console.ReadLine();
 
         Console.Write("Choose a password: ");
@@ -99,28 +97,24 @@ class Program
     {
         while (true) // need to return the user to the main menu if they enter an invalid input
         {
+            Console.Clear();
             Console.WriteLine("Welcome. Please choose a mode: ");
-            Console.WriteLine("1. Expense Records");
-            Console.WriteLine("2. Outstanding Debts");
-            Console.WriteLine("3. Reporting Activity");
-            Console.WriteLine("4. Go Back (Log Out)");
+            string[] modeOptions = { "Expense records", "Outstanding Debts", "Reporting Activity", "Go Back"};
+            int chooseOption = DisplayMenu(modeOptions);
 
-            string choice = Console.ReadLine();
-
-            switch (choice)
+            switch (chooseOption)
             {
-                case "1":
+                case 0:
                     ExpenseRecords(user);
                     break;
-                case "2":
+                case 1:
                     Debt.OutstandingDebts(user);
                     break;
-            
-                // add this logic
-                case "3":
+                case 2:
                     Console.WriteLine("Reporting Activity is not implemented yet.");
+                    Console.ReadKey();
                     break;
-                case "4":
+                case 3:
                     Console.WriteLine("Logging Out");
                     return; 
             }
@@ -128,23 +122,62 @@ class Program
 
         static void ExpenseRecords(User user)
         {
-            Console.WriteLine(" Do you want to:" + "\n" + "1. Create a new expense record" + "\n" + "2. Delete an expense record"+ "\n" + "3. Go Back");
-            string option = Console.ReadLine();
-            if (option == "1")
+            while (true)
             {
-                // call the method to create a new expense record from expenserecord.cs
-                ExpenseRecord.CreateExpenseRecord(user);
+                Console.Clear();
+                Console.WriteLine("Choose an option: ");
+                string[] expenseChoice = {"Creation a new expense record", "Delete an expense record", "Go Back"};            
+                int selectedOption = DisplayMen(expenseChoice);            
+                if (selectedOption == 0)
+                {
+                    // call the method to create a new expense record from expenserecord.cs
+                    ExpenseRecord.CreateExpenseRecord(user);
+                }
+                else if (selectedOption == 1)
+                {
+                    ExpenseRecord.DeleteExpenseRecord(); 
+                }
+                else if (selectedOption == 2)
+                {
+                    return; 
+                } 
             }
-            else if (option == "2")
-            {
-                ExpenseRecord.DeleteExpenseRecord(); 
-            }
-            else if (option == "3")
-            {
-                return; 
-            } 
         }
+    }
+    static int DisplayMenu(string[] options)
+    {
+        int selectedIndex = 0;
 
+        ConsoleKey key;
+        do
+        {
+            Console.Clear();
+            for (int i = 0; i < options.Length; i++)
+            {
+                if (i == selectedIndex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"> {options[i]}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.WriteLine($"  {options[i]}");
+                }
+            }
 
+            key = Console.ReadKey(true).Key;
+
+            if (key == ConsoleKey.UpArrow)
+            {
+                selectedIndex = (selectedIndex == 0) ? options.Length - 1 : selectedIndex - 1;
+            }
+            else if (key == ConsoleKey.DownArrow)
+            {
+                selectedIndex = (selectedIndex == options.Length - 1) ? 0 : selectedIndex + 1;
+            }
+        } while (key != ConsoleKey.Enter);
+
+        return selectedIndex;
     }
 }
