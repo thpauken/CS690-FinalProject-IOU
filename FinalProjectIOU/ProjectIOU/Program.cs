@@ -127,7 +127,7 @@ class Program
             {
                 Console.Clear();
                 Console.WriteLine("Choose an option: ");
-                string[] expenseChoice = {"Creation a new expense record", "Delete an expense record", "Go Back"};            
+                string[] expenseChoice = {"Create a new expense record", "Delete an expense record", "Go Back"};            
                 int selectedOption = DisplayMenu(expenseChoice);            
                 if (selectedOption == 0)
                 {
@@ -136,7 +136,7 @@ class Program
                 }
                 else if (selectedOption == 1)
                 {
-                    ExpenseRecord.DeleteExpenseRecord(); 
+                    ExpenseRecord.DeleteExpenseRecord(user); 
                 }
                 else if (selectedOption == 2)
                 {

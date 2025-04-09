@@ -93,7 +93,7 @@ public class ExpenseRecord
     }
     
     // method to delete existing expense records
-    public static void DeleteExpenseRecord()
+    public static void DeleteExpenseRecord(User user)
     {
         if (!File.Exists("ExpenseRecords.txt"))
         {
@@ -109,10 +109,23 @@ public class ExpenseRecord
             Console.ReadKey();
             return;
         }
+        // only get expense records created by the logged in user
+        var userRecords = lines.Where(line =>
+        {
+            var parts = line.Split(',');
+            return parts.Length >= 3 && parts[2] == user.Username;
+        }).ToArray();
+
+        if (userRecords.Length == 0)
+        {
+            Console.WriteLine("No expense records exist.");
+            Console.ReadKey();
+            return;
+        }
         // display the names of the existing expense records
         Console.Clear();
         Console.WriteLine("Expense Records:");
-        string[] expenseNames = lines.Select((line, index) =>
+        string[] expenseNames = userRecords.Select((line, index) =>
         {
             var parts = line.Split(',');
             return (index + 1) + ". " + parts[1];
@@ -126,7 +139,7 @@ public class ExpenseRecord
             return;
         }
         
-        if (choice < 0 || choice >= lines.Length)
+        if (choice < 0 || choice >= userRecords.Length)
         {
             Console.WriteLine("Invalid choice. Please try again.");
             Console.ReadKey();
@@ -139,7 +152,7 @@ public class ExpenseRecord
         {
             return;
         }
-        var expenseRecordToBeDeleted = lines[choice];
+        var expenseRecordToBeDeleted = userRecords[choice];
         var expenseRecordParts = expenseRecordToBeDeleted.Split(',');
         var expenseIdToDelete = expenseRecordParts[0];
 
