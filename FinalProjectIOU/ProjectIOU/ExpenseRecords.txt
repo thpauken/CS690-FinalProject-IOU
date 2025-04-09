@@ -1,5 +1,0 @@
-9243bc7f-e491-42eb-a32d-09aec6444e64,Test Record,thpauken,0,04/09/2025 02:43:21
-b7c2803d-f83b-4558-b302-cbcf5c1b1199,Test record,thpauken,200,04/09/2025 02:44:24
-669e573f-8352-49b4-a9f8-3ef2cf6780db,Florida Trip 2,thpauken,100,04/09/2025 02:54:17
-e74d5f65-2b03-45bf-a459-777fba6cd9fb,Florida 2,thpauken2,10000,04/09/2025 02:54:44
-
