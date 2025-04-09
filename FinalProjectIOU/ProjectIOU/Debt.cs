@@ -44,42 +44,45 @@ public class Debt
          }
          // display the unpaid debt records that are found
          Console.Clear();
-         Console.WriteLine("Outstanding Debts:" + "\n");
-         string[] debtOptions = unpaidDebts.Select((debt, index) =>)
-            
-         {
-            var debt = unpaidDebts[i];
-            Console.WriteLine((i + 1) + ". Person: " + debt[1] + " | Amount: " + debt[3]);
-         }
+         Console.WriteLine("Outstanding Debts:\n");
+         string[] debtOptions = unpaidDebts.Select((debt, index) =>
+            $"{index + 1}. Person: {debt[1]} | Amount: {debt[3]}"
+        ).Concat(new[] { "Go Back" }).ToArray();
 
-         Console.WriteLine("Enter the number of the debt you would like to mark as paid, or type 'back' to go back to mode menu");
-         string input = Console.ReadLine();
-         if (input == "back")
-         {
-            return; 
-         }
-         if (int.TryParse(input, out int debtNumber) && debtNumber > 0 && debtNumber <= unpaidDebts.Count)
-         {
-            var selectedDebt = unpaidDebts[debtNumber - 1];
-            selectedDebt[4] = "Paid"; // update the PaidStatus to Paid 
+        int selectedOption = Program.DisplayMenu(debtOptions);
 
-            var updatedDebtLines = debtLines.Select(line => 
-            {
-                var parts = line.Split(',');
-                if (parts[0] == selectedDebt[0] && parts[1] == selectedDebt[1] && parts[2] == selectedDebt[2] && parts[3] == selectedDebt[3])
-                {
-                    parts[4] = "Paid"; // Mark this specific debt as paid
-                }
-                return string.Join(",", parts);
-            }).ToList();
-
-            File.WriteAllLines("Debts.txt", updatedDebtLines);
-            Console.WriteLine("\nDebt Owned by " + selectedDebt[1] + " for " + selectedDebt[3] + " has been paid!\n");
-        }
-        else
+        if (selectedOption == debtOptions.Length - 1) // "Go Back" option
         {
-            Console.WriteLine("Invalid input, try again.");
+            return;
         }
+         
+         Console.Clear();
+        var selectedDebt = unpaidDebts[selectedOption];
+        Console.WriteLine($"Do you want to mark this debt as paid?\nPerson: {selectedDebt[1]} | Amount: {selectedDebt[3]}");
+        string[] confirmationOptions = { "Yes, mark as paid", "No, go back" };
+        int confirmationChoice = Program.DisplayMenu(confirmationOptions);
+
+        if (confirmationChoice == 1) // "No, go back"
+        {
+            continue;
+        }
+
+        // Mark the debt as paid
+        selectedDebt[4] = "Paid"; // Update the PaidStatus to Paid
+
+        var updatedDebtLines = debtLines.Select(line =>
+        {
+            var parts = line.Split(',');
+            if (parts[0] == selectedDebt[0] && parts[1] == selectedDebt[1] && parts[2] == selectedDebt[2] && parts[3] == selectedDebt[3])
+            {
+                parts[4] = "Paid"; // Mark this specific debt as paid
+            }
+            return string.Join(",", parts);
+        }).ToList();
+
+        File.WriteAllLines("Debts.txt", updatedDebtLines);
+        Console.WriteLine($"\nDebt owed by {selectedDebt[1]} for {selectedDebt[3]} has been marked as paid!\n");
+        Console.ReadKey();
       }
    }
 }

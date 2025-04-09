@@ -1,0 +1,2 @@
+e966b82e-1daa-4f48-a9bc-a3544b809f12,Florida Trip,thpauken,100,04/09/2025 02:14:21
+7782cfb3-c8da-43c5-9a00-022f743b3d59,Test Expense Record,thpauken,450,04/09/2025 02:15:09

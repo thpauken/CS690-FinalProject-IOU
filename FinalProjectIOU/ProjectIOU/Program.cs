@@ -23,16 +23,17 @@ class Program
                 CreateAccount();
             }
 
-            else (chosenOption == 2)
+            else
             {
                 Console.WriteLine("See ya later!");
+                return;
             }
         }
     
     }
     static void Login()
     {
-        Console.Clear()
+        Console.Clear();
         Console.WriteLine("Username: ");
         string username = Console.ReadLine();
         Console.Write("Password: ");
@@ -127,7 +128,7 @@ class Program
                 Console.Clear();
                 Console.WriteLine("Choose an option: ");
                 string[] expenseChoice = {"Creation a new expense record", "Delete an expense record", "Go Back"};            
-                int selectedOption = DisplayMen(expenseChoice);            
+                int selectedOption = DisplayMenu(expenseChoice);            
                 if (selectedOption == 0)
                 {
                     // call the method to create a new expense record from expenserecord.cs
@@ -144,17 +145,18 @@ class Program
             }
         }
     }
-    static int DisplayMenu(string[] options)
+    
+    public static int DisplayMenu(string[] options)
     {
-        int selectedIndex = 0;
+        int selectIndex = 0;
+        ConsoleKey key; 
 
-        ConsoleKey key;
         do
         {
             Console.Clear();
             for (int i = 0; i < options.Length; i++)
             {
-                if (i == selectedIndex)
+                if (i == selectIndex)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"> {options[i]}");
@@ -170,14 +172,14 @@ class Program
 
             if (key == ConsoleKey.UpArrow)
             {
-                selectedIndex = (selectedIndex == 0) ? options.Length - 1 : selectedIndex - 1;
+                selectIndex = (selectIndex == 0) ? options.Length - 1 : selectIndex - 1;
             }
             else if (key == ConsoleKey.DownArrow)
             {
-                selectedIndex = (selectedIndex == options.Length - 1) ? 0 : selectedIndex + 1;
+                selectIndex = (selectIndex == options.Length - 1) ? 0 : selectIndex + 1;
             }
         } while (key != ConsoleKey.Enter);
-
-        return selectedIndex;
+        return selectIndex;
     }
 }
+       

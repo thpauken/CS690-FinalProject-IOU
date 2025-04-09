@@ -71,22 +71,23 @@ public class ExpenseRecord
             {
                 
                 Console.WriteLine("Enter the amount they owe: ");
-                if (decimal.TryParse(Console.ReadLine(), out decimal owedAmount) == false)
+                decimal owedAmount; // Declare owedAmount here, outside the if-else blocks
+
+                if (!decimal.TryParse(Console.ReadLine(), out owedAmount))
                 {
                     Console.WriteLine("Invalid amount. Please enter a valid number.");
                     continue;
                 }
-                else 
-                {
-                decimal owedAmount = Convert.ToDecimal(Console.ReadLine());
-                // create a debt record and add the person name, OwedToPerson as the logged-in-user, and defaulting debts to unpaid
+
+                // Create a debt record and add the person name, OwedToPerson as the logged-in user, and defaulting debts to unpaid
                 Person owingPerson = new Person(personName);
-                Person owedToPerson = new Person (user.Username);
+                Person owedToPerson = new Person(user.Username);
                 Debt newDebt = new Debt(owingPerson, owedToPerson, owedAmount, newRecord);
                 newRecord.AddDebt(newDebt);
-            }   }
-        // save the debt records to a debt file
+                Console.WriteLine("Debt added successfully!");
+            }
         }
+    // save the debt records to a debt file
     newRecord.SaveToFile();
     Console.WriteLine("Expense record " + expenseName + " created!");
     }
@@ -118,26 +119,33 @@ public class ExpenseRecord
         }).ToArray();
         
         string[] options = expenseNames.Concat(new[] { "Go Back" }).ToArray();
-        int choice = DisplayMenu(options);
+        int choice = Program.DisplayMenu(options);
+        
         if (choice == options.Length - 1)
         {
             return;
         }
         
+        if (choice < 0 || choice >= lines.Length)
+        {
+            Console.WriteLine("Invalid choice. Please try again.");
+            Console.ReadKey();
+            return;
+        }
         Console.WriteLine("Are you sure you want to delete?");
         string[] confirming = {"Yes", "No"};
-        int confirmationChoice = DisplayMenu(confirming);
+        int confirmationChoice = Program.DisplayMenu(confirming);
         if (confirmationChoice == 1)
         {
             return;
         }
-        var expenseRecordToBeDeleted = lines[recordNumber - 1];
+        var expenseRecordToBeDeleted = lines[choice];
         var expenseRecordParts = expenseRecordToBeDeleted.Split(',');
         var expenseIdToDelete = expenseRecordParts[0];
 
         // delete the specified expense record
         // isolate the record to delete in an array 
-        var updatedLines = lines.Where((line, index) => index != recordNumber - 1).ToArray(); 
+        var updatedLines = lines.Where((line, index) => index != choice).ToArray(); 
         File.WriteAllLines("ExpenseRecords.txt", updatedLines);
         Console.WriteLine("Deleted expense record and associated debts");             
     
@@ -146,7 +154,6 @@ public class ExpenseRecord
         var updatedDebtLines = debtLines.Where(line => !line.StartsWith(expenseIdToDelete)).ToArray();
         File.WriteAllLines("Debts.txt", updatedDebtLines);
 
-        Console.WriteLine("Deleted expense records and associated debts");
         Console.ReadKey();
         
     }
