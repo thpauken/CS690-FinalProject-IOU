@@ -8,6 +8,7 @@ public class Debt
    public decimal OwedAmount { get; set; }
    public PaidStatus PaidStatus { get; set; }
    public ExpenseRecord LinkedExpenseRecord { get; set; } // stores reference to expense record
+   public DateTime? PaidDate { get; set; }
 
 // defining the constructor
 // defining how default values are set like PaidStatus set to Unpaid, and PaidDate default value until it is later updated when PaidStatus is Paid
@@ -18,6 +19,7 @@ public class Debt
       OwedAmount = owedAmount;
       PaidStatus = PaidStatus.Unpaid;
       LinkedExpenseRecord = linkedExpenseRecord; 
+      PaidDate = null;
    }
    public static void OutstandingDebts(User loggedInUser)
    {
@@ -68,17 +70,35 @@ public class Debt
         }
 
         // Mark the debt as paid
+        if (selectedDebt.Length == 5)
+         {
+               Array.Resize(ref selectedDebt, 6); // add a new column for PaidDate
+         }
+         else if (selectedDebt.Length == 6)
+         {
+               selectedDebt[5] = ""; // have the date be blank
+         }
         selectedDebt[4] = "Paid"; // Update the PaidStatus to Paid
+        selectedDebt[5] = DateTime.Now.ToString("yyyy-MM-dd"); // capture the current date when this update was made
 
-        var updatedDebtLines = debtLines.Select(line =>
-        {
-            var parts = line.Split(',');
-            if (parts[0] == selectedDebt[0] && parts[1] == selectedDebt[1] && parts[2] == selectedDebt[2] && parts[3] == selectedDebt[3])
+      var updatedDebtLines = debtLines.Select(line =>
+      {
+         var parts = line.Split(',');
+         // check the number of columns first in the debt record line
+         if (parts.Length < 5) return line; // Skip invalid lines
+
+         if (parts[0] == selectedDebt[0] && parts[1] == selectedDebt[1] && parts[2] == selectedDebt[2] && parts[3] == selectedDebt[3])
+         {
+            parts[4] = "Paid"; // Mark this specific debt as paid
+            // then check that we had a column for paid date
+            if (parts.Length == 5)
             {
-                parts[4] = "Paid"; // Mark this specific debt as paid
+               Array.Resize(ref parts, 6); // Add a new column for PaidDate
             }
-            return string.Join(",", parts);
-        }).ToList();
+            parts[5] = DateTime.Now.ToString("yyyy-MM-dd"); // Update the payment date
+         }
+         return string.Join(",", parts);
+      }).ToList();
 
         File.WriteAllLines("Debts.txt", updatedDebtLines);
         Console.WriteLine($"\nDebt owed by {selectedDebt[1]} for {selectedDebt[3]} has been marked as paid!\n");
