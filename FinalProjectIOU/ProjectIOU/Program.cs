@@ -100,7 +100,7 @@ class Program
         {
             Console.Clear();
             Console.WriteLine("Welcome. Please choose a mode: ");
-            string[] modeOptions = { "Expense records", "Outstanding Debts", "Reporting Activity", "Go Back"};
+            string[] modeOptions = { "Expense records", "Outstanding Debts", "Payment Reporting", "Go Back"};
             int chooseOption = DisplayMenu(modeOptions);
 
             switch (chooseOption)
@@ -112,8 +112,7 @@ class Program
                     Debt.OutstandingDebts(user);
                     break;
                 case 2:
-                    Console.WriteLine("Reporting Activity is not implemented yet.");
-                    Console.ReadKey();
+                    PaymentReporting.DisplayPaidDebtRecords(user);
                     break;
                 case 3:
                     Console.WriteLine("Logging Out");
