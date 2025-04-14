@@ -48,6 +48,7 @@ We don't need to test that the debt record exists, that has been tested in Expen
         Assert.Contains(debtId + "," + owingPerson + "," + owedToPerson + "," + amount + "," + "Paid", updatedLines);
     }
 }
+    
 
 
 

@@ -168,4 +168,3 @@ public class ExpenseRecordTests
         ExpenseRecord.ReadKey = Console.ReadKey;
     }
 }
-
