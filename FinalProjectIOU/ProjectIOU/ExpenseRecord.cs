@@ -93,12 +93,14 @@ public class ExpenseRecord
     }
     
     // method to delete existing expense records
+    // refactoring Console.ReadKey so i can use it in testing
+    public static Func<ConsoleKeyInfo> ReadKey = Console.ReadKey;
     public static void DeleteExpenseRecord(User user)
     {
         if (!File.Exists("ExpenseRecords.txt"))
         {
             Console.WriteLine("No expense records exist.");
-            Console.ReadKey();
+            ReadKey();
             return;
         }
         // fixed issue with blank rows in expense file shifting the index of listed expense records 
@@ -106,7 +108,7 @@ public class ExpenseRecord
         if (lines.Length == 0)
         {   
             Console.WriteLine("No expense records exist.");
-            Console.ReadKey();
+            ReadKey();
             return;
         }
         // only get expense records created by the logged in user
@@ -119,7 +121,7 @@ public class ExpenseRecord
         if (userRecords.Length == 0)
         {
             Console.WriteLine("No expense records exist.");
-            Console.ReadKey();
+            ReadKey();
             return;
         }
         // display the names of the existing expense records
@@ -142,7 +144,7 @@ public class ExpenseRecord
         if (choice < 0 || choice >= userRecords.Length)
         {
             Console.WriteLine("Invalid choice. Please try again.");
-            Console.ReadKey();
+            ReadKey();
             return;
         }
         Console.WriteLine("Are you sure you want to delete?");
@@ -160,14 +162,15 @@ public class ExpenseRecord
         // isolate the record to delete in an array 
         var updatedLines = lines.Where((line, index) => index != choice).ToArray(); 
         File.WriteAllLines("ExpenseRecords.txt", updatedLines);
-        Console.WriteLine("Deleted expense record and associated debts");             
+        Console.WriteLine("Deleted expense record and associated debts"); 
+        ReadKey();             
     
         // now delete associated debt records; put them in an array, match to expense record ID, delete
         var debtLines = File.ReadAllLines("Debts.txt").Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
         var updatedDebtLines = debtLines.Where(line => !line.StartsWith(expenseIdToDelete)).ToArray();
         File.WriteAllLines("Debts.txt", updatedDebtLines);
 
-        Console.ReadKey();
+        ReadKey();
         
     }
 }

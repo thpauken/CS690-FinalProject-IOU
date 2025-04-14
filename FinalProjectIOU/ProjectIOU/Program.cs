@@ -1,9 +1,44 @@
 ﻿namespace ProjectIOU;
 
 using System.IO;
-class Program
+public static class Program
 {
+    public static Func<string[], int> DisplayMenu = DefaultDisplayMenu;
 
+    public static int DefaultDisplayMenu(string[] options)
+    {
+        int selectedIndex = 0;
+
+        while (true)
+        {
+            Console.Clear();
+            for (int i = 0; i < options.Length; i++)
+            {
+                if (i == selectedIndex)
+                {
+                    Console.WriteLine($"> {options[i]}");
+                }
+                else
+                {
+                    Console.WriteLine($"  {options[i]}");
+                }
+            }
+
+            var key = Console.ReadKey(true).Key;
+
+            switch (key)
+            {
+                case ConsoleKey.UpArrow:
+                    selectedIndex = (selectedIndex - 1 + options.Length) % options.Length;
+                    break;
+                case ConsoleKey.DownArrow:
+                    selectedIndex = (selectedIndex + 1) % options.Length;
+                    break;
+                case ConsoleKey.Enter:
+                    return selectedIndex; // Return the selected index
+            }
+        }
+    }   
     static string loginsFile = "logins.txt";
 
     static void Main()
@@ -144,41 +179,6 @@ class Program
             }
         }
     }
-    
-    public static int DisplayMenu(string[] options)
-    {
-        int selectIndex = 0;
-        ConsoleKey key; 
-
-        do
-        {
-            Console.Clear();
-            for (int i = 0; i < options.Length; i++)
-            {
-                if (i == selectIndex)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"> {options[i]}");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    Console.WriteLine($"  {options[i]}");
-                }
-            }
-
-            key = Console.ReadKey(true).Key;
-
-            if (key == ConsoleKey.UpArrow)
-            {
-                selectIndex = (selectIndex == 0) ? options.Length - 1 : selectIndex - 1;
-            }
-            else if (key == ConsoleKey.DownArrow)
-            {
-                selectIndex = (selectIndex == options.Length - 1) ? 0 : selectIndex + 1;
-            }
-        } while (key != ConsoleKey.Enter);
-        return selectIndex;
-    }
 }
+    
        
