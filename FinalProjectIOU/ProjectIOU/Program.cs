@@ -170,7 +170,7 @@ public static class Program
                 }
                 else if (selectedOption == 1)
                 {
-                    ExpenseRecord.DeleteExpenseRecord(user, "ExpenseRecords.txt", "Debts.txt"); 
+                    ExpenseRecord.DeleteExpenseRecord(user); 
                 }
                 else if (selectedOption == 2)
                 {

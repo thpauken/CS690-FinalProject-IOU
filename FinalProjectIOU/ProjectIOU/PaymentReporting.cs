@@ -3,16 +3,16 @@ using System.IO;
 
 public class PaymentReporting
 {
-    public static void DisplayPaidDebtRecords (User loggedInUser)
+    public static void DisplayPaidDebtRecords (User loggedInUser, string debtsFilePath = "Debts.txt")
     {
-        if (!File.Exists("Debts.txt"))
+        if (!File.Exists(debtsFilePath))
         {
             Console.WriteLine("There are no debt records, regardless of paid or unpaid!");
             Console.ReadKey();
             return;
         }
         
-        var debtLines = File.ReadAllLines("Debts.txt");
+        var debtLines = File.ReadAllLines(debtsFilePath);
         // this will filter Outstandig debt records just to those that are "Paid" status and created by logged in user
         var paidDebts = debtLines
             .Select(line => line.Split(','))
